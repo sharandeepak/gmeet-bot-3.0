@@ -51,7 +51,7 @@ connection.commit()
 
 @eel.expose
 def login_to_google():
-    x=subprocess.Popen('c: & cd c:\\Program Files (x86)\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+    x=subprocess.Popen('c: & cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
     opt=Options()
     opt.add_argument("start-maximized")
     opt.add_experimental_option("debuggerAddress","localhost:8989")
@@ -169,8 +169,8 @@ def open(meeting_link):
     print("im in open function")
     try:
         if is_port_in_use()==False:
-            print("im in try if")
-            x=subprocess.Popen('c: & cd c:\\Program Files (x86)\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+            print("im in try if is_port_in_use()==False")
+            x=subprocess.Popen('c: & cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
             opt=Options()
             opt.add_argument("start-maximized")
             opt.add_experimental_option("debuggerAddress","localhost:8989")
@@ -184,14 +184,13 @@ def open(meeting_link):
             join(driver)
 
         else:
-            print("im in try elif")
+            print("im in is_port_in_use == True")
             opt=Options()
             opt.add_experimental_option("debuggerAddress","localhost:8989")
             
             opt.add_argument("start-maximized")
             #driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
             driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
-            print("im in true")
             no_of_tabs=len(driver.window_handles)
             
             driver.execute_script("window.open('about:blank', 'tab{}');".format(no_of_tabs+1))
@@ -200,22 +199,21 @@ def open(meeting_link):
             join(driver)
     except:
         if is_port_in_use()==False:
-            print("im in except if")
-            x=subprocess.Popen('c: & cd c:\\Program Files (x86)\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+            print("im in except is_port_in_use()==False")
+            x=subprocess.Popen('c: & cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
             opt=Options()
             opt.add_argument("start-maximized")
             opt.add_experimental_option("debuggerAddress","localhost:8989")
             
             # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
             driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
-            print("im in false")
             no_of_tabs=len(driver.window_handles)
             
             driver.get(meeting_link)
             join(driver)
 
         else:
-            print("im in except elif")
+            print("im in except is_port_in_use()==True")
             opt=Options()
             opt.add_experimental_option("debuggerAddress","localhost:8989")
             
@@ -232,25 +230,29 @@ def open(meeting_link):
         
 def join(driver):
     driver.maximize_window()
-    audioWait = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div"))
-    )
-    videoWait = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div"))
-    )
-    joinWait = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span"))
-    )
+    audioWait = WebDriverWait(driver, 50)
+    audioElement = audioWait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div")))
+    videoWait = WebDriverWait(driver, 50)
+    videoElement = videoWait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div")))
+    joinWait = WebDriverWait(driver, 50)
+    joinElement = joinWait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span")))
+    # audioWait = WebDriverWait(driver, 50).until(
+    #     EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div"))
+    # )
+    # videoWait = WebDriverWait(driver, 50).until(
+    #     EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div"))
+    # )
+    # joinWait = WebDriverWait(driver, 50).until(
+    #     EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span"))
+    # )
     audio_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div")
     audio_btn.click()
     aval = audio_btn.get_attribute("data-is-muted")
     print("Audio Muted : "+aval)
-    print(type(aval))
     video_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div")
     video_btn.click()
     vval = video_btn.get_attribute("data-is-muted")
     print("Video Muted : "+vval)
-    print(type(vval))
     # join_btn = driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[2]/div/div[1]/div[2]/div/div[2]/div/div[1]/div[1]/span")
     # join_btn.click()
     iterating_var=0
@@ -258,11 +260,11 @@ def join(driver):
         aval = audio_btn.get_attribute("data-is-muted")
         vval = video_btn.get_attribute("data-is-muted")
         time.sleep(2)
-        if aval==False:
+        if aval=="false":
             audio_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div")
             audio_btn.click()
             aval = audio_btn.get_attribute("data-is-muted")
-        if vval==False:
+        if vval=="false":
             video_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div")
             video_btn.click()
             vval = video_btn.get_attribute("data-is-muted")
