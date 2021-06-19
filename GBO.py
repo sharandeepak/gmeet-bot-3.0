@@ -185,7 +185,6 @@ def open(meeting_link):
             driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
             print("im in false")
             no_of_tabs=len(driver.window_handles)
-            
             driver.get(meeting_link)
             join(driver)
 
@@ -206,6 +205,7 @@ def open(meeting_link):
     except Exception as e: 
         print(e)   
 def join(driver):
+    print("im in join")
     driver.maximize_window()
     audioWait = WebDriverWait(driver, 50)
     audioElement = audioWait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div")))
@@ -213,6 +213,7 @@ def join(driver):
     videoElement = videoWait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div")))
     joinWait = WebDriverWait(driver, 50)
     joinElement = joinWait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span")))
+    print("im after element_clickable")
     # audioWait = WebDriverWait(driver, 50).until(
     #     EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div"))
     # )
