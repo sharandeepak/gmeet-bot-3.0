@@ -15,6 +15,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+audio_old="//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div"
+audio_new="//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div"
+
+video_old="//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div"
+video_new="//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div"
+
+join_old="//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span"
+join_new="//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[2]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span"
+
 
 connection = sqlite3.connect('database.db',check_same_thread=False)
 
@@ -207,30 +216,48 @@ def open(meeting_link):
 def join(driver):
     print("im in join")
     driver.maximize_window()
-    audioWait = WebDriverWait(driver, 50)
-    audioElement = audioWait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div")))
-    videoWait = WebDriverWait(driver, 50)
-    videoElement = videoWait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div")))
-    joinWait = WebDriverWait(driver, 50)
-    joinElement = joinWait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span")))
+    try:
+        audioWait = WebDriverWait(driver, 50)
+        audioElement = audioWait.until(EC.element_to_be_clickable((By.XPATH, audio_old)))
+        videoWait = WebDriverWait(driver, 50)
+        videoElement = videoWait.until(EC.element_to_be_clickable((By.XPATH, video_old)))
+        joinWait = WebDriverWait(driver, 50)
+        joinElement = joinWait.until(EC.element_to_be_clickable((By.XPATH, join_old)))
+    except:
+        audioWait = WebDriverWait(driver, 50)
+        audioElement = audioWait.until(EC.element_to_be_clickable((By.XPATH, audio_new)))
+        videoWait = WebDriverWait(driver, 50)
+        videoElement = videoWait.until(EC.element_to_be_clickable((By.XPATH, video_new)))
+        joinWait = WebDriverWait(driver, 50)
+        joinElement = joinWait.until(EC.element_to_be_clickable((By.XPATH, join_new)))
     print("im after element_clickable")
     # audioWait = WebDriverWait(driver, 50).until(
-    #     EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div"))
+    #     EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div"))
     # )
     # videoWait = WebDriverWait(driver, 50).until(
-    #     EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div"))
+    #     EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div"))
     # )
     # joinWait = WebDriverWait(driver, 50).until(
-    #     EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span"))
+    #     EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[2]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span"))
     # )
-    audio_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div")
-    audio_btn.click()
-    aval = audio_btn.get_attribute("data-is-muted")
-    print("Audio Muted : "+aval)
-    video_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div")
-    video_btn.click()
-    vval = video_btn.get_attribute("data-is-muted")
-    print("Video Muted : "+vval)
+    try:
+        audio_btn=driver.find_element_by_xpath(audio_old)
+        audio_btn.click()
+        aval = audio_btn.get_attribute("data-is-muted")
+        print("Audio Muted : "+aval)
+        video_btn=driver.find_element_by_xpath(video_old)
+        video_btn.click()
+        vval = video_btn.get_attribute("data-is-muted")
+        print("Video Muted : "+vval)
+    except:
+        audio_btn=driver.find_element_by_xpath(audio_new)
+        audio_btn.click()
+        aval = audio_btn.get_attribute("data-is-muted")
+        print("Audio Muted : "+aval)
+        video_btn=driver.find_element_by_xpath(video_new)
+        video_btn.click()
+        vval = video_btn.get_attribute("data-is-muted")
+        print("Video Muted : "+vval)
     # join_btn = driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[2]/div/div[1]/div[2]/div/div[2]/div/div[1]/div[1]/span")
     # join_btn.click()
     iterating_var=0
@@ -239,20 +266,34 @@ def join(driver):
         vval = video_btn.get_attribute("data-is-muted")
         time.sleep(2)
         if aval=="false":
-            audio_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div")
-            audio_btn.click()
-            aval = audio_btn.get_attribute("data-is-muted")
+            try:
+                audio_btn=driver.find_element_by_xpath(audio_old)
+                audio_btn.click()
+                aval = audio_btn.get_attribute("data-is-muted")
+            except:
+                audio_btn=driver.find_element_by_xpath(audio_new)
+                audio_btn.click()
+                aval = audio_btn.get_attribute("data-is-muted")         
         if vval=="false":
-            video_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div")
-            video_btn.click()
-            vval = video_btn.get_attribute("data-is-muted")
+            try:
+                video_btn=driver.find_element_by_xpath(video_old)
+                video_btn.click()
+                vval = video_btn.get_attribute("data-is-muted")
+            except:
+                video_btn=driver.find_element_by_xpath(video_new)
+                video_btn.click()
+                vval = video_btn.get_attribute("data-is-muted")
         print("attempt no."+str(iterating_var))
         try:
             if aval == "true" and vval=="true":
                 print("isAudioMuted:"+str(aval))
                 print("isVideoMuted:"+str(vval))
-                join_btn = driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span")
-                join_btn.click()
+                try:
+                    join_btn = driver.find_element_by_xpath(join_old)
+                    join_btn.click()
+                except:
+                    join_btn = driver.find_element_by_xpath(join_new)
+                    join_btn.click()
                 time.sleep(2)
                 break
             else:
