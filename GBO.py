@@ -203,8 +203,8 @@ def open(meeting_link):
             driver.switch_to.window('tab{}'.format(no_of_tabs+1))
             driver.get(meeting_link)
             join(driver)
-    except:
-        print("File not found")    
+    except Exception as e: 
+        print(e)   
 def join(driver):
     driver.maximize_window()
     audioWait = WebDriverWait(driver, 50)
